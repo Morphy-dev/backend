@@ -36,4 +36,3 @@
 ## Notas  
 - Requiere **Python 3.8+**.  
 - Asegúrate de tener **PostgreSQL** instalado y en funcionamiento.  
-```
