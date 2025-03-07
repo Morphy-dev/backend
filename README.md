@@ -25,7 +25,7 @@
 
 4. Ejecuta el servidor:  
    ```bash
-   uvicorn app.main:app --reload
+   uvicorn main:app --reload
    ```
 
 5. Accede a la API en:  
