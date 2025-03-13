@@ -112,7 +112,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     access_token = create_access_token(
-        {"sub": str(user.id), "role": user.role.value}, 
+        {"sub": str(user.id), "role": user.role}, 
         timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
 

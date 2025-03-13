@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from uuid import UUID
-from typing import Optional
+from typing import Optional, List
 from app.models import UserRole
 
 class UserCreate(BaseModel):
@@ -31,3 +31,48 @@ class SchoolResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class GroupBase(BaseModel):
+    name: str
+
+class GroupCreate(GroupBase):
+    pass
+
+class GroupResponse(GroupBase):
+    id: UUID
+    teacher_id: UUID
+
+    class Config:
+        orm_mode = True
+
+
+class StudentResponse(BaseModel):
+    id: UUID
+    name: str
+    email: str
+
+    class Config:
+        orm_mode = True
+
+class GroupResponseWithStudents(BaseModel):
+    id: UUID
+    name: str
+    teacher_id: UUID
+    students: List[StudentResponse]
+
+    class Config:
+        orm_mode = True
+
+
+class LessonBase(BaseModel):
+    title: str
+
+class LessonCreate(LessonBase):
+    pass
+
+class LessonResponse(LessonBase):
+    id: UUID
+    group_id: UUID
+
+    class Config:
+        orm_mode = True

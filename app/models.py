@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from passlib.context import CryptContext
 import enum
+import uuid
 from .database import Base
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -39,3 +40,37 @@ class User(Base):
     @staticmethod
     def hash_password(password: str) -> str:
         return pwd_context.hash(password)
+
+class Group(Base):
+    __tablename__ = "groups"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    name = Column(String, nullable=False)
+    teacher_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
+
+    # Relationships
+    teacher = relationship("User", back_populates="groups")
+    students = relationship("GroupStudent", back_populates="group")
+    lessons = relationship("Lesson", back_populates="group", cascade="all, delete-orphan")
+
+
+class GroupStudent(Base):
+    __tablename__ = "group_students"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    group_id = Column(UUID(as_uuid=True), ForeignKey("groups.id", ondelete="CASCADE"))
+    student_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
+
+    # Relationships
+    group = relationship("Group", back_populates="students")
+    student = relationship("User", back_populates="student_groups")
+
+class Lesson(Base):
+    __tablename__ = "lessons"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    title = Column(String, nullable=False)
+    group_id = Column(UUID(as_uuid=True), ForeignKey("groups.id", ondelete="CASCADE"))
+
+    # Relationship
+    group = relationship("Group", back_populates="lessons")
