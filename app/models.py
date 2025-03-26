@@ -40,6 +40,10 @@ class User(Base):
     @staticmethod
     def hash_password(password: str) -> str:
         return pwd_context.hash(password)
+    
+    groups = relationship("Group", back_populates="teacher")
+    student_groups = relationship("GroupStudent", back_populates="student")
+
 
 class Group(Base):
     __tablename__ = "groups"

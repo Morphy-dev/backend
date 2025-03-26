@@ -4,6 +4,7 @@ from app.models import GroupStudent
 from app.models import User
 from app.schemas import GroupCreate
 from app.schemas import UserCreate
+from sqlalchemy.orm import Session, joinedload
 import uuid
 
 def create_group(db: Session, group: GroupCreate, teacher_id: uuid.UUID):
@@ -20,9 +21,10 @@ def add_student_to_group(db: Session, group_id: uuid.UUID, student_data: UserCre
     hashed_password = User.hash_password("defaultpassword")
     db_student = User(
         id=uuid.uuid4(),
-        name=student_data.name,
+        full_name=student_data.full_name,
         email=student_data.email,
-        hashed_password=hashed_password,  # Replace with actual hashing logic
+        password_hash=hashed_password,
+        school_id=student_data.school_id,
         role="student"
     )
     db.add(db_student)
