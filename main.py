@@ -6,6 +6,7 @@ from app.routes.Groups import groups
 from app.routes import schools
 from app.routes.Lessons import lessons
 from app.routes import s3_upload
+from mangum import Mangum
 
 app = FastAPI()
 
@@ -35,7 +36,9 @@ app.include_router(lessons.router, prefix='/lessons', tags=["lessons"])
 app.include_router(s3_upload.router, tags=["uploads"])
 
 
-print(app.routes)
 @app.get("/")
 def root():
     return {"message": "FastAPI Backend is Running"}
+
+handler = Mangum(app)
+
