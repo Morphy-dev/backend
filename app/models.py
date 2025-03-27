@@ -16,7 +16,7 @@ class UserRole(enum.Enum):
 class School(Base):
     __tablename__ = "schools"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, unique=True, nullable=False)
 
     users = relationship("User", back_populates="school")
@@ -24,7 +24,7 @@ class School(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     full_name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False, index=True)
     cellphone = Column(String, unique=True, nullable=True)
@@ -43,6 +43,7 @@ class User(Base):
     
     groups = relationship("Group", back_populates="teacher")
     student_groups = relationship("GroupStudent", back_populates="student")
+    profile = relationship("UserProfile", back_populates="user", uselist=False)
 
 
 class Group(Base):
@@ -78,3 +79,12 @@ class Lesson(Base):
 
     # Relationship
     group = relationship("Group", back_populates="lessons")
+
+class UserProfile(Base):
+    __tablename__ = "user_profile"
+
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), primary_key=True)
+    picture_url = Column(String, nullable=True)
+
+    # Optional: if you want to access `profile.user` in Python
+    user = relationship("User", back_populates="profile")

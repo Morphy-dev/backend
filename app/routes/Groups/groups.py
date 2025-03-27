@@ -35,6 +35,7 @@ def add_student_to_group(
     return crud.add_student_to_group(db=db, group_id=group_id, student_data=student_in)
 
 
+
 @router.get("/my-groups", response_model=List[schemas.GroupResponseWithStudents])
 def get_my_groups(
     db: Session = Depends(get_db),
@@ -47,7 +48,7 @@ def get_my_groups(
             "name": group.name,
             "teacher_id": group.teacher_id,
             "students": [
-                {"id": student.student.id, "name": student.student.name, "email": student.student.email}
+                {"id": student.student.id, "name": student.student.full_name, "email": student.student.email}
                 for student in group.students
             ]
         }

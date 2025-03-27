@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.Groups import groups
 from app.routes import schools
 from app.routes.Lessons import lessons
+from app.routes import s3_upload
 
 app = FastAPI()
 
@@ -30,6 +31,9 @@ app.include_router(groups.router, prefix='/groups', tags=["groups"])
 
 
 app.include_router(lessons.router, prefix='/lessons', tags=["lessons"])
+
+app.include_router(s3_upload.router, tags=["uploads"])
+
 
 print(app.routes)
 @app.get("/")

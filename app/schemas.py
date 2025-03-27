@@ -10,6 +10,7 @@ class UserCreate(BaseModel):
     school_id: UUID
     password: str
     role: str  # ✅ Expect string instead of Enum
+    picture_url: Optional[str] = None
 
 class UserResponse(BaseModel):
     id: UUID
@@ -17,6 +18,7 @@ class UserResponse(BaseModel):
     email: EmailStr
     role: str  # ✅ Return string instead of Enum
     school_id: UUID
+    picture_url: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -76,3 +78,15 @@ class LessonResponse(LessonBase):
 
     class Config:
         orm_mode = True
+
+
+class SchoolCreate(BaseModel):
+    name: str
+
+class SchoolResponse(BaseModel):
+    id: UUID
+    name: str
+
+    model_config = {
+        "from_attributes": True  # Pydantic v2
+    }
